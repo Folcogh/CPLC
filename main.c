@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     size_t size = ftell(file);
 
     // Create a buffer to put file content
-    void* buffer = malloc(size);
+    char* buffer = malloc(size);
     if (buffer == NULL) {
         fprintf(stderr, "Couldn't allocate memory to read the file %s\n", argv[1]);
         return EXIT_FAILURE;
@@ -56,6 +56,14 @@ int main(int argc, char **argv)
     printf("File %s found and successfully read\n", argv[1]);
     printf("Size: %I64u bytes\n", size);
 
+    unsigned int linecount = 0;
+    for (unsigned int i = 0; i < size - 1; i++) {
+        if ((buffer[i] == 0x0D) && (buffer[i+1] == 0x0A)) {
+            linecount++;
+        }
+    }
+
+    printf("Lines found: %u\n", linecount);
 
     // Finally, free the buffer
     free(buffer);
